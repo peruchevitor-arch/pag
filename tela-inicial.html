@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tela inicial</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Pacifico&family=Bebas+Neue&family=Roboto+Mono:wght@400..700&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;--r:14px}
+*{box-sizing:inherit}
+html,body{height:100%;margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#fff;background:#222;overflow-x:hidden}
+#bg{position:fixed;inset:-30px;background:center/cover no-repeat;z-index:-2}
+#dim{position:fixed;inset:0;z-index:-1}
+.wrap{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;padding-top:calc(24px + env(safe-area-inset-top,0px));padding-bottom:calc(60px + env(safe-area-inset-bottom,0px))}
+.col{width:min(640px,100%);display:flex;flex-direction:column;gap:12px}
+.clock{display:flex;align-items:flex-start;gap:8px;text-shadow:0 2px 12px rgba(0,0,0,.35);font-family:var(--cf,system-ui);color:var(--cc,#fff)}
+.clock.right{justify-content:flex-end}.clock.center{justify-content:center}
+#time{font-size:var(--cs,64px);font-weight:var(--cw,700);letter-spacing:-1px;line-height:1}
+#temp{font-size:calc(var(--cs,64px)*.28);font-weight:700;margin-top:.3em}
+#sub{font-size:15px;opacity:.9;text-shadow:0 1px 8px rgba(0,0,0,.4);display:flex;gap:14px;flex-wrap:wrap}
+#sub.right{justify-content:flex-end}#sub.center{justify-content:center}
+.row{display:flex;gap:8px}
+button,input,select,textarea{font:inherit}
+.btn{width:50px;height:50px;border:0;border-radius:var(--r);background:rgba(20,20,20,.85);color:#fff;font-size:20px;cursor:pointer;flex:none}
+.btn:hover{background:#000}
+#q{flex:1;height:50px;border:0;border-radius:var(--r);padding:0 16px;background:rgba(20,20,20,.85);color:#fff;font-size:16px;outline:none;min-width:0}
+#q::placeholder{color:#aaa}#q:focus{box-shadow:0 0 0 2px #fff}
+#eng{position:fixed;right:16px;bottom:calc(14px + env(safe-area-inset-bottom,0px));height:36px;border:0;border-radius:var(--r);background:rgba(20,20,20,.85);color:#fff;padding:0 10px;font-size:13px;cursor:pointer;z-index:2}
+#fav{display:flex;gap:14px;flex-wrap:wrap;min-height:64px}
+.app{display:flex;flex-direction:column;align-items:center;gap:6px;width:64px;color:#fff;text-decoration:none;font-size:12px;text-shadow:0 1px 6px rgba(0,0,0,.6);cursor:pointer;background:none;border:0;padding:0}
+.av{width:46px;height:46px;border-radius:calc(var(--r) - 2px);display:grid;place-items:center;font-weight:700;font-size:20px;color:#fff;background:#555;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.app span{max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#goal{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;font-size:14px;opacity:.85;text-shadow:0 1px 8px rgba(0,0,0,.5);cursor:pointer;padding:0 130px}
+#ov{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.5);padding:16px;z-index:5}
+#ov.on{display:flex}
+.card{display:none;background:#1e1e1e;border-radius:18px;padding:20px;width:min(440px,100%);max-height:88vh;overflow:auto}
+.card.on{display:block}
+.card h2{margin:0 0 10px;font-size:17px}
+.card h3{margin:20px 0 4px;font-size:14px;color:#9ad}
+.card label{display:block;font-size:12px;color:#aaa;margin:12px 0 6px}
+.card select,.card input[type=text],.card input[type=url],.card textarea{width:100%;height:38px;border-radius:10px;border:1px solid #444;background:#111;color:#fff;padding:0 10px}
+.card textarea{height:120px;padding:10px;resize:vertical}
+.card input[type=range]{width:100%}.card input[type=color]{width:100%;height:38px;border:0;background:none;padding:0}
+.chk{display:flex;gap:16px;margin-top:12px;font-size:14px;flex-wrap:wrap}.chk label{margin:0;color:#fff;display:flex;gap:6px;align-items:center}
+.sw{display:flex;gap:8px;flex-wrap:wrap}.sw button{width:48px;height:36px;border-radius:9px;border:2px solid transparent;cursor:pointer}.sw button.sel{border-color:#fff}
+.ok{margin-top:18px;width:100%;height:40px;border:0;border-radius:10px;background:#fff;color:#111;font-weight:600;cursor:pointer}
+.li{display:flex;align-items:center;gap:10px;padding:6px 0}
+.li .av{width:34px;height:34px;font-size:15px;box-shadow:none}.li b{flex:1;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ib{background:none;border:0;color:#aaa;font-size:18px;cursor:pointer;padding:4px}.ib.on{color:#ffd43b}
+.two{display:flex;gap:8px}.two input{flex:1}.two button{flex:none;border:0;border-radius:10px;background:#fff;color:#111;padding:0 14px;font-weight:600;cursor:pointer;height:38px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:14px;margin:8px 0}.grid .app{width:auto}
+</style>
+</head>
+<body>
+<div id="bg"></div><div id="dim"></div>
+<div class="wrap"><div class="col">
+  <div class="clock" id="clk"><span id="time">--:--</span><span id="temp">23°</span></div>
+    <form class="row" onsubmit="return false">
+    <button type="button" class="btn" onclick="show('p-set')" title="Configurações">⚙</button>
+    <button type="button" class="btn" onclick="show('p-apps')" title="Apps">📁</button>
+    <input id="q" type="text" placeholder="Pesquisar…" autocomplete="off" autofocus>
+    
+  </form>
+</div></div>
+<div id="goal"></div>
+<select id="eng"><option value="google">Google</option><option value="ddg">DuckDuckGo</option><option value="bing">Bing</option><option value="yt">YouTube</option><option value="claude">IA Claude</option></select>
+
+<div id="ov">
+ <div class="card" id="p-set">
+  <h2>Configurações</h2>
+  <label>Wallpaper</label><div class="sw" id="sw"></div>
+  <label>Sua imagem</label><input type="file" id="file" accept="image/*">
+  <div class="chk"><label><input type="checkbox" id="auto"> Trocar wallpaper todo dia</label></div>
+  <label>Desfoque</label><input type="range" id="blur" min="0" max="20">
+  <label>Escurecer</label><input type="range" id="dimr" min="0" max="70">
+  <label>Arredondamento</label><input type="range" id="rad" min="4" max="26">
+  <h3>Relógio</h3>
+  <label>Fonte</label>
+  <select id="cf"><option value="system-ui, sans-serif">Padrão</option><option value="Orbitron, sans-serif">Orbitron</option><option value="'Bebas Neue', sans-serif">Bebas Neue</option><option value="'Roboto Mono', monospace">Roboto Mono</option><option value="Pacifico, cursive">Pacifico</option><option value="Georgia, serif">Georgia</option></select>
+  <label>Tamanho</label><input type="range" id="cz" min="28" max="140" step="2">
+  <label>Espessura</label><input type="range" id="cw" min="300" max="900" step="100">
+  <label>Cor</label><input type="color" id="cc">
+  <label>Posição</label><select id="side"><option value="left">Esquerda</option><option value="center">Centro</option><option value="right">Direita</option></select>
+  <div class="chk"><label><input type="checkbox" id="c24"> 24 horas</label><label><input type="checkbox" id="csec"> Segundos</label></div>
+  
+  <label>Temperatura (°C)</label><input type="text" id="tin" inputmode="numeric">
+  <label>Frase ou meta do dia</label><input type="text" id="gin" maxlength="90">
+  <button class="ok" onclick="hide()">Fechar</button>
+ </div>
+ <div class="card" id="p-apps">
+  <h2>Apps</h2>
+  <div id="alist" class="grid"></div><div class="chk"><label><input type="checkbox" id="edt"> Modo editar (toque para remover)</label></div>
+  <h3>Adicionar app</h3>
+  <div class="two"><input type="text" id="an" placeholder="Nome"><input type="url" id="au" placeholder="https://…"></div>
+  <div class="two" style="margin-top:8px"><button onclick="addApp()" style="flex:1">+ Adicionar</button></div>
+  <button class="ok" onclick="hide()">Fechar</button>
+ </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const L=k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}};
+const W=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const G=["linear-gradient(135deg,#a5d8ff,#74c0fc)","linear-gradient(135deg,#b197fc,#f783ac)","linear-gradient(135deg,#ffd43b,#ff6b6b)","linear-gradient(135deg,#63e6be,#228be6)","linear-gradient(135deg,#212529,#495057)"];
+const S=Object.assign({font:"system-ui, sans-serif",size:64,weight:700,color:"#ffffff",h24:true,sec:false,side:"left",bg:0,img:"",blur:0,dim:20,auto:false,eng:"google",temp:"23",tz:"",goal:"",rad:14},L("s")||{});
+let apps=L("apps")||[{n:"YouTube",u:"https://youtube.com",f:1},{n:"Gmail",u:"https://mail.google.com",f:1},{n:"GitHub",u:"https://github.com",f:1},{n:"WhatsApp",u:"https://web.whatsapp.com",f:0},{n:"Maps",u:"https://maps.google.com",f:0}];
+const ENG={google:"https://www.google.com/search?q=",ddg:"https://duckduckgo.com/?q=",bing:"https://www.bing.com/search?q=",yt:"https://www.youtube.com/results?search_query=",claude:"https://claude.ai/new?q="};
+const save=()=>W("s",S);
+function go(u){if(window.top===window)location.href=u;else window.open(u,"_blank")}
+function show(id){$("ov").classList.add("on");document.querySelectorAll(".card").forEach(c=>c.classList.toggle("on",c.id===id));if(id==="p-apps")renderApps()}
+function hide(){$("ov").classList.remove("on")}
+$("ov").onclick=e=>{if(e.target.id==="ov")hide()};
+const p2=n=>String(n).padStart(2,"0");
+function tick(){
+  const d=new Date();let h=d.getHours();const hh=S.h24?h:(h%12||12);
+  $("time").textContent=p2(hh)+":"+p2(d.getMinutes())+(S.sec?":"+p2(d.getSeconds()):"");
+}
+function look(){
+  const c=$("clk"),s=c.style;
+  s.setProperty("--cf",S.font);s.setProperty("--cs",S.size+"px");s.setProperty("--cw",S.weight);s.setProperty("--cc",S.color);
+  c.classList.toggle("right",S.side==="right");c.classList.toggle("center",S.side==="center");
+  document.documentElement.style.setProperty("--r",S.rad+"px");
+  const i=S.auto?Math.floor(Date.now()/864e5)%G.length:S.bg;
+  $("bg").style.background=S.img?"url("+S.img+") center/cover no-repeat":G[i];
+  $("bg").style.filter="blur("+S.blur+"px)";$("dim").style.background="rgba(0,0,0,"+S.dim/100+")";
+  $("temp").textContent=(S.temp||"--")+"°";
+  $("goal").textContent=S.goal||"Clique aqui para definir uma meta do dia";$("goal").style.opacity=S.goal?.85:.4;
+  save();tick();
+}
+G.forEach((g,i)=>{const b=document.createElement("button");b.style.background=g;b.onclick=()=>{S.bg=i;S.img="";S.auto=false;$("auto").checked=false;look()};$("sw").appendChild(b)});
+$("file").onchange=e=>{const f=e.target.files[0];if(!f)return;const u=URL.createObjectURL(f),im=new Image();
+  im.onload=()=>{const sc=Math.min(1,2560/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);
+    c.getContext("2d").drawImage(im,0,0,c.width,c.height);let q=.85,d=c.toDataURL("image/jpeg",q);
+    while(d.length>3e6&&q>.4){q-=.1;d=c.toDataURL("image/jpeg",q)}
+    URL.revokeObjectURL(u);S.img=d;S.auto=false;$("auto").checked=false;look()};
+  im.onerror=()=>alert("Não consegui abrir essa imagem. Use PNG, JPG ou WebP.");
+  im.src=u};
+[["cf","font"],["cz","size"],["cw","weight"],["cc","color"],["side","side"],["blur","blur"],["dimr","dim"],["rad","rad"],["tin","temp"],["gin","goal"]].forEach(([i,k])=>{
+  const el=$(i);el.value=S[k];
+  el.oninput=e=>{let v=e.target.value;if(["size","weight","blur","dim","rad"].includes(k))v=+v;if(k==="temp")v=v.replace(/[^\d-]/g,"");S[k]=v;look()};
+});
+$("c24").checked=S.h24;$("csec").checked=S.sec;$("auto").checked=S.auto;
+$("c24").onchange=e=>{S.h24=e.target.checked;look()};$("csec").onchange=e=>{S.sec=e.target.checked;look()};$("auto").onchange=e=>{S.auto=e.target.checked;if(S.auto)S.img="";look()};
+$("goal").onclick=()=>show("p-set");
+$("eng").value=S.eng;$("eng").onchange=e=>{S.eng=e.target.value;save()};
+$("q").addEventListener("keydown",e=>{if(e.key!=="Enter")return;const v=$("q").value.trim();if(!v)return;
+  go(/^https?:\/\//i.test(v)?v:ENG[S.eng]+encodeURIComponent(v))});
+
+/* apps */
+const hue=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))%360;return "hsl("+h+",55%,45%)"};
+function avatar(a){const d=document.createElement("div");d.className="av";d.textContent=(a.n||"?").charAt(0).toUpperCase();d.style.background=hue(a.n);return d}
+function renderApps(){
+  const box=$("alist"),ed=$("edt").checked;box.textContent="";
+  apps.forEach((a,i)=>{const l=document.createElement("a");l.className="app";l.href=a.u;l.target="_blank";l.rel="noopener";
+    l.appendChild(avatar(a));const s=document.createElement("span");s.textContent=a.n;l.appendChild(s);
+    if(ed){l.removeAttribute("href");l.onclick=()=>{apps.splice(i,1);W("apps",apps);renderApps()};const x=document.createElement("em");x.textContent="remover";x.style.cssText="font-size:10px;color:#f88;font-style:normal";l.appendChild(x)}
+    box.appendChild(l)});
+}
+$("edt").onchange=renderApps;
+function addApp(){
+  const n=$("an").value.trim();let u=$("au").value.trim();if(!n||!u)return;
+  if(!/^https?:\/\//i.test(u))u="https://"+u;
+  apps.push({n:n,u:u,f:1});W("apps",apps);$("an").value="";$("au").value="";renderApps();
+}
+
+renderApps();look();setInterval(tick,1000);
+</script>
+</body>
+</html>
